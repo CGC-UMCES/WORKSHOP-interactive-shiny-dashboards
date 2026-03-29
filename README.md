@@ -1,6 +1,6 @@
 # Introduction to Data Dashboards Workshop
 
-> A 3-hour hands-on workshop covering the fundamentals of interactive data dashboards, with a focus on R Shiny and environmental geospatial data.
+> A 3-hour hands-on workshop covering the fundamentals of interactive data dashboards, with a focus on R Shiny and environmental geospatial data. Developed by CGC-SCIPE research scientist Burch Fisher (`burch.fisher@umces.edu`) with the assistance of [Claude (claude.ai)](https://claude.ai).
 
 ---
 
