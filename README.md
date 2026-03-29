@@ -421,8 +421,8 @@ install.packages("package_name")
 
 **ngrok shows ERR_NGROK_3200:** The tunnel has dropped. Check that both the Shiny app and the ngrok terminal are still running. Re-run `ngrok http PORT` to get a new URL.
 
-**Still stuck?** Open an issue in this repository or email `[WORKSHOP CONTACT EMAIL]` before the workshop date.
+**Still stuck?** Open an issue in this repository or email `burch.fisher@umces.edu` before the workshop date.
 
 ---
 
-*Workshop materials developed for a mixed audience of researchers and students. Please open an issue or pull request if you find errors or have suggestions.*
+*Workshop materials developed for a mixed audience of faculty, researchers, and students. Please open an issue or pull request if you find errors or have suggestions.*
