@@ -269,7 +269,7 @@ Additional packages needed:
 install.packages(c("dataRetrieval", "nhdplusTools", "FedData", "lubridate", "purrr"))
 ```
 
-Expected run time: 10–20 minutes depending on connection speed.
+Expected run time: 1–5 minutes depending on connection speed.
 
 | Layer | Dataset | Source | Size |
 |-------|---------|--------|------|
