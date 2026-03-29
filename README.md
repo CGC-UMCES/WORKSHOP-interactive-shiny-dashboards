@@ -236,7 +236,7 @@ Start from `mini_app.R` and progressively add features. Suggested prompts:
 
 ### Track B — Bring your own data
 
-Use `mini_app.R` as a template to visualize your own dataset. Suggested starting prompt:
+Use `mini_app.R` as a template to visualize your own dataset or create your own from scratch. Suggested starting prompt:
 
 *"I have a CSV file called [filename] with columns [list your columns]. I want to build a Shiny app similar to mini_app.R that shows [describe what you want]. The app should have a map showing [geographic component] and a [time series / bar chart / scatter plot] of [data component]. Here is the mini_app.R code as a starting point: [paste the full code]."*
 
