@@ -393,7 +393,8 @@ Quarto and R Markdown can render interactive-looking HTML outputs with Plotly ch
 - [shinyapps.io](https://www.shinyapps.io)
 
 ### LLM Coding Assistants
-- [Claude (claude.ai)](https://claude.ai) — recommended for this workshop
+- [Google Gemini](https://gemini.google.com/app) - Available through UMCES accounts
+- [Claude (claude.ai)](https://claude.ai)
 - [ChatGPT](https://chatgpt.com)
 
 ---
