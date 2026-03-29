@@ -193,7 +193,7 @@ The annotated steps are there as reference — students can read them at their o
 
 ![Full app reactive diagram](app_reactive_linkages.svg)
 
-**`app.R` runs immediately with no data files** — simulated data is active by default. To swap in real Chesapeake Bay data, run `data_prep.R` first (see [Real Data Setup](#real-data-setup)). `mini_app.R` requires the real data files and will not run without them.
+**`app.R` runs with either simulated data or the real data files** — real world data is active by default. To swap in simulated Chesapeake Bay data, change Step 3 to `True` in app.R (see [Real Data Setup](#real-data-setup)). `mini_app.R` requires the real data files and will not run without them.
 
 **Features to demonstrate live:**
 - Toggle NLCD land cover on and off, switch basemaps — observe z-ordering keeps the raster visible
