@@ -181,6 +181,7 @@ The code is divided into 6 steps. Steps 1–3 can be run interactively in the co
 
 `app.R` is a fully annotated 17-step dashboard for the Baltimore Harbor / Chesapeake Bay region. Rather than walking every step line by line, focus the group walkthrough on:
 
+- **Step 3** — simulated data as a way to build an app in preparation for real world data
 - **Step 4** — lookup tables and the named vector pattern (`"Label" = "value"`)
 - **Step 5** — UI structure: identifying every `inputId` and `outputId`
 - **Steps 7–8** — reactive expressions: how `wq_filtered()` serves as a shared data hub for multiple outputs
