@@ -207,7 +207,7 @@ The annotated steps are there as reference — students can read them at their o
 
 ## Part 3 — LLM Coding Session
 
-The last hour is for hands-on coding with an LLM assistant (Claude or ChatGPT). Choose the track that fits your goals.
+The last hour is for hands-on coding with an LLM assistant (Gemini or other of your choice). Choose the track that fits your goals.
 
 **A key tip before you start:** you do not need real data to build a working app. You can ask the LLM to generate simulated data that matches whatever structure you want — a time series, a set of spatial points, a categorical dataset — and build the full app around it first. Once the app is working, swapping in real data is usually just changing the data loading step. This is the same approach used in `app.R`, which has a full simulated data fallback built in. A good prompt to get started:
 
