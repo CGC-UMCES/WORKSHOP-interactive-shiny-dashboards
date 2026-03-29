@@ -97,7 +97,7 @@ cat("All packages loaded successfully!\n")
 
 ### 3. Download the Workshop Files
 
-1. Go to the workshop GitHub repository: `https://github.com/YOUR-ORG/YOUR-REPO-NAME`
+1. Go to the workshop GitHub repository: [https://github.com/CGC-UMCES/WORKSHOP-interactive-shiny-dashboards/tree/main](https://github.com/CGC-UMCES/WORKSHOP-interactive-shiny-dashboards/tree/main)
 2. Click the green **Code** button near the top right
 3. Select **Download ZIP**
 4. Once downloaded, unzip the file and move the resulting folder somewhere easy to find — your Desktop is a good choice
