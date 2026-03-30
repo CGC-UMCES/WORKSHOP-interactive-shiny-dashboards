@@ -219,7 +219,7 @@ server <- function(input, output, session) {
   # changes). It recolors all markers using leafletProxy() — no map redraw.
   observe({
     df  <- station_means()
-    pal <- colorNumeric("YlOrRd", domain = df$mean_val, reverse = TRUE)
+    pal <- colorNumeric("YlOrRd", domain = df$mean_val)
 
     leafletProxy("map") |>
       clearGroup("WQ Stations") |>
