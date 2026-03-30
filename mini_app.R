@@ -242,7 +242,8 @@ server <- function(input, output, session) {
         pal      = colorNumeric("YlOrRd", domain = df$mean_val, reverse = TRUE),
         values   = df$mean_val,
         title    = paste0("Mean<br>", param_units[input$variable]),
-        layerId  = "legend"
+        layerId  = "legend",
+        labFormat = labelFormat(transform = function(x) sort(x, decreasing = TRUE))
       )
   })
 
