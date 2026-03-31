@@ -408,7 +408,7 @@ update.packages(ask = FALSE)
 install.packages("package_name")
 ```
 
-**`leaflet.extras` not available:** Not on CRAN for R 4.x. Removed from the demo app. See Step 1 of `app.R`.
+**`leaflet.extras` is now available on CRAN for R 4.x. Removed from the demo app but could be incorporated with some effort now in `app.R`.
 
 **Special characters show as ? in RStudio viewer:** Font rendering issue in the viewer pane only. Click **Open in Browser** — the browser renders everything correctly and gives more screen space.
 
