@@ -65,12 +65,12 @@
 #             ))
 #
 #           NOTE: leaflet.extras (adds a freehand draw toolbar to the map)
-#           is not available on CRAN for R 4.x at time of writing, so it has
-#           been removed from this app. If it becomes available or you are on
-#           an older R version, install it with:
+#           has been removed from this app. The package installs without issue
+#           but integrating it requires non-trivial code changes beyond simply
+#           adding the library and a single function call. If you wish to attempt it:
 #             install.packages("leaflet.extras")
-#           Then add library(leaflet.extras) below and addDrawToolbar() in
-#           the renderLeaflet block in Step 9.
+#           Add library(leaflet.extras) below and addDrawToolbar() in the
+#           renderLeaflet block in Step 9, then expect additional debugging.
 # ==============================================================================
 
 library(shiny)           # The reactive web-app framework - the engine of everything
