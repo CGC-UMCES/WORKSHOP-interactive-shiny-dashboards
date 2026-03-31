@@ -124,7 +124,8 @@ Don't stress about having a perfect dataset — the goal is to practice the work
 
 ```
 workshop_files/
-├── presentation.pdf                  # Part 1 slides
+├── presentation.html                 # Part 1 slides
+├── presenter_notes.txt               # Part 1 slide notes
 ├── mini_app.R                        # Simple 6-step intro app (start here in Part 2)
 ├── mini_app_reactive_linkages.svg    # Reactive diagram for mini_app.R
 ├── app.R                             # Full annotated 17-step demo app
