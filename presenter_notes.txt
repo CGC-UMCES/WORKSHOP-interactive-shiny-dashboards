@@ -1,0 +1,106 @@
+PRESENTER NOTES — Introduction to Data Dashboards Workshop
+============================================================
+
+Slide 1: Introduction to Data Dashboards
+────────────────────────────────────────────────────────────
+Welcome everyone. This workshop runs about 3 hours — presentation first, then we open RStudio and walk through the code, then you get hands-on time with an LLM assistant. All the files are in the repo so you can follow along or revisit everything later.
+
+Slide 2: Framing
+────────────────────────────────────────────────────────────
+Before we define anything, let's look at a few real examples. [Switch to browser tabs and show 2-3 live dashboards.] Keep it brief — the goal is to give people a feel for the range before we get into definitions.
+
+Slide 3: What is a data dashboard?
+────────────────────────────────────────────────────────────
+The key word is "without writing code" — the user shouldn't need to be an analyst to get value from it. The left column is when a dashboard earns its complexity. The right column is the honest check — a well-designed static figure and a paragraph of text often does the job just as well, and is much easier to maintain.
+
+Slide 4: Know your audience before you build
+────────────────────────────────────────────────────────────
+This is probably the most important slide in the whole deck. The same underlying dataset often needs three completely different dashboard designs depending on who sits in front of it. A PI exploring data needs different controls than a program manager checking status, who needs different controls than a public-facing science communication tool. Ask yourself: who is the primary user, and what decision are they trying to make?
+
+Slide 5: Tool Landscape
+────────────────────────────────────────────────────────────
+This section is a quick survey — we are not going deep on any of these tools except Shiny. The goal is to give you enough vocabulary to make an informed choice and to know what your colleagues are talking about when they mention Streamlit or Observable.
+
+Slide 6: Overview of dashboard tools
+────────────────────────────────────────────────────────────
+A few things worth flagging: Shiny is now available for Python as well as R — the syntax and concepts are nearly identical. Observable and Quarto are interesting because they produce static HTML files with JavaScript interactivity — no server required, hostable on GitHub Pages for free. Shinylive does something similar but actually compiles R to WebAssembly so real R code runs in the browser. We will come back to all of these in the sharing paradigms section.
+
+Slide 7: How to choose
+────────────────────────────────────────────────────────────
+The single most important question is language — use what your team already knows. The learning curve for a new framework is real, and the best dashboard is one that gets built and maintained. For research audiences already in R with complex spatial data, Shiny is almost always the right answer. That said, if your collaborators are in Python, Streamlit or Dash might be a better fit for the team even if you personally prefer R.
+
+Slide 8: Sharing Paradigms
+────────────────────────────────────────────────────────────
+This section covers something that trips up a lot of people — they build a great app and then don't know how to share it. The options range from zero effort to significant infrastructure investment. Knowing the spectrum helps you pick the right tool for the right moment.
+
+Slide 9: The sharing spectrum
+────────────────────────────────────────────────────────────
+Complexity, infrastructure, and cost all increase together from left to right. The key insight is that you don't have to start at the right end — local and tunneled options let you share a working app in minutes with zero deployment. You can always move right as your needs grow.
+
+Slide 10: Comparing your options
+────────────────────────────────────────────────────────────
+Worth calling out the asterisked rows — Cloud and Institutional both have Python equivalents. For Cloud, Streamlit Community Cloud and Plotly Chart Studio are the closest equivalents to shinyapps.io. For Institutional, Voila running through JupyterHub is the most common Python path in a university setting. The self-hosted row is red across the board not because it is bad, but because it requires the most from you — a real server, ongoing maintenance, and someone who knows what they are doing.
+
+Slide 11: Local, static & tunneled
+────────────────────────────────────────────────────────────
+Key point about ngrok: your computer is doing ALL the computation. If 20 people open your ngrok URL simultaneously, all 20 sessions are running on your laptop — your CPU, your RAM, your internet connection. It also means if you close your laptop, the app dies. ngrok is framework agnostic — it just tunnels whatever is on that port. You could even run it from a Colab notebook instead of a terminal. Great for demos and quick sharing, not for anything long-term.
+
+Slide 12: Cloud hosted & serverless
+────────────────────────────────────────────────────────────
+The key distinction between Static HTML and Serverless: static HTML can only reorganize data that was already baked into the file at build time — no new computation happens. Shinylive actually executes R code on demand in the browser via WebAssembly, so users can trigger real calculations. All three — Shinylive, Observable, and Quarto — can be hosted on GitHub Pages for free, which is a big advantage. The shared tradeoff is that all data must be bundled with the file, so large datasets are not practical.
+
+Slide 13: Other sharing options
+────────────────────────────────────────────────────────────
+Posit Connect vs Shiny Server: Shiny Server is free and open source but serves Shiny only. Posit Connect is the paid enterprise version that adds authentication, Python support, scheduled reports, and fine-grained access control. Many universities already have one of these — worth asking your IT or research computing group before standing up your own infrastructure. Docker is powerful but requires real DevOps knowledge — the payoff is that your app runs identically anywhere.
+
+Slide 14: Large Data Considerations
+────────────────────────────────────────────────────────────
+This section is context-setting for the demo app we are about to walk through. The NLCD raster in today's app is deliberately downsampled to ~150m so it fits in the browser — in a production app serving a full-resolution nationwide dataset you would need one of the strategies we are about to cover.
+
+Slide 15: Browser rendering limits
+────────────────────────────────────────────────────────────
+The rule of thumb is ~5MB — above that you need a strategy. This applies to both rasters and vectors. A shapefile of detailed US county boundaries can easily be 50MB+. The browser does not care what the data represents — it has to render every vertex, every pixel. Simplification and aggregation are almost always the right first step before reaching for a tile server.
+
+Slide 16: Large Raster Handling
+────────────────────────────────────────────────────────────
+COG is worth highlighting specifically — unlike the other options here, it requires no server infrastructure at all. A COG is just a specially formatted GeoTIFF that supports HTTP range requests, so the browser fetches only the bytes it needs for the current viewport. You can host it on S3 or GitHub and get tile-server-like behavior for free. Zarr is the equivalent for multidimensional data — think daily temperature grids over 40 years. Major climate datasets like ERA5 and CMIP6 are increasingly distributed as Zarr on cloud storage.
+
+Slide 17: Large Vector Handling
+────────────────────────────────────────────────────────────
+FlatGeobuf and PMTiles are the COG equivalents for vector data — both support HTTP range requests and require no server. FlatGeobuf is great for simple feature collections. PMTiles is better when you need tiled vector rendering at multiple zoom levels. The simplification approach with st_simplify() is often the easiest win — a tolerance of 0.001 degrees (~100m) is usually invisible to the eye but can reduce file size by 80% or more.
+
+Slide 18: Large Tabular Data
+────────────────────────────────────────────────────────────
+DuckDB is a game changer for large tabular data — it can query a 10GB Parquet file in seconds without loading it into memory. The pattern is: DuckDB runs the query server-side in R or Python, and only the aggregated result gets sent to the browser. Datashader takes a different approach — instead of reducing the data, it renders all of it as a rasterized heatmap image. The browser receives an image, not millions of individual points, so rendering is instant regardless of dataset size.
+
+Slide 19: R Shiny Syntax & Concepts
+────────────────────────────────────────────────────────────
+We are now shifting gears into the vocabulary you will need when we open RStudio. This section is intentionally brief — the goal is to give you just enough to orient yourself in the code, not to make you a Shiny expert. The code walkthrough in Part 2 is where the real learning happens.
+
+Slide 20: Every Shiny app has two parts
+────────────────────────────────────────────────────────────
+The UI is evaluated once at startup — it is just a description of the layout, like an HTML template. No data, no logic. The server is where everything happens — it runs once per user session and participates in the reactive graph. A key insight: data should be loaded OUTSIDE the server function if possible, so it is read into memory once and shared across all sessions rather than re-read on every reactive update.
+
+Slide 21: Inputs and outputs are the wires
+────────────────────────────────────────────────────────────
+The inputId and outputId strings are the wiring between UI and server. If they do not match exactly — including case — nothing will render and you will get a silent failure. This is one of the most common beginner mistakes. The arrow between the two code blocks on the right shows this connection — the "map" string in the UI placeholder must match the output$map name in the server exactly.
+
+Slide 22: Reactivity: the engine of Shiny
+────────────────────────────────────────────────────────────
+Reactivity is not unique to Shiny — Observable has a very similar model, Dash has callbacks, and Vue/React in JavaScript are built on the same idea. What makes Shiny distinctive is that you never have to declare what depends on what — Shiny figures out the dependency graph automatically. In Dash, for example, you explicitly declare which inputs and outputs each callback connects. In Shiny you just read input$variable inside a reactive() and Shiny knows to re-run it when that input changes.
+
+Slide 23: Reactivity in code
+────────────────────────────────────────────────────────────
+The chain shown here is exactly what happens in mini_app.R when you click a station marker: the observeEvent fires and stores the station ID, which invalidates the reactive() that filters data for that station, which causes renderPlotly() to re-run and draw the updated time series. Three functions, one user action, zero manual wiring. This is the core of what makes Shiny powerful.
+
+Slide 24: Reactive linkages in mini_app.R
+────────────────────────────────────────────────────────────
+This diagram shows every reactive connection in mini_app.R. Trace any arrow and you can follow exactly what triggers what. We will walk through this code in a few minutes — keep this diagram in mind as a navigation aid. The full app.R has a similar diagram in the repo that shows a more complex version of the same patterns.
+
+Slide 25: Resources & links
+────────────────────────────────────────────────────────────
+These links are all clickable in the browser — they open in a new tab. The file is in the workshop repo so participants can access it after the session. Worth pointing out Mastering Shiny specifically — it is a free online book by Hadley Wickham and is the best resource for going deeper on Shiny after today.
+
+Slide 26: What's next
+────────────────────────────────────────────────────────────
+Part 2 starts with mini_app.R — it has just one dropdown, one map click event, and one time series plot. We will run it, interact with it, and trace every arrow in the reactive diagram. Then we move to app.R which layers on top of those same concepts. In Part 3 you will have an LLM assistant — Claude, Gemini, or ChatGPT — and the goal is to extend mini_app.R or bring your own data. Do not worry about having a perfect dataset — you can ask the LLM to generate simulated data and build the app around it first.

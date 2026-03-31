@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Introduction to Data Dashboards</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/theme/white.css">
+<style>
+:root{--teal:#0e9e73;--teal-dk:#0a7a58;--teal-lt:#e8f7f2;--teal-md:#b2dfd1;--text:#1a2e26;--muted:#6b8c82;}
+.reveal-viewport{background:#f7f9f8;}
+.reveal{font-family:'Helvetica Neue',Calibri,Arial,sans-serif;color:var(--text);}
+.reveal .slides{top:0 !important;transform:translate(-50%,0) !important;}.reveal .slides section{padding-top:0.7em;display:block !important;height:auto !important;}.reveal section.present,.reveal section.future,.reveal section.past{top:0 !important;}
+.reveal h1{font-family:'Helvetica Neue',Calibri,Arial,sans-serif;font-size:1.7em;font-weight:600;color:var(--text);line-height:1.2;text-shadow:none;text-transform:none;letter-spacing:-0.01em;}
+.reveal h2{font-family:'Helvetica Neue',Calibri,Arial,sans-serif;font-size:1.2em;font-weight:600;color:var(--text);text-transform:none;letter-spacing:normal;text-shadow:none;margin-bottom:0.5em;padding-bottom:0.2em;border-bottom:2px solid var(--teal);}
+.reveal h3{font-family:'Helvetica Neue',Calibri,Arial,sans-serif;font-size:0.75em;font-weight:600;color:var(--teal-dk);text-transform:none;margin:0 0 0.3em;}
+.reveal p{font-size:0.6em;line-height:1.35;color:var(--text);font-weight:500;}
+.reveal ul{list-style:none;padding:0;margin:0;}
+.reveal ul li{position:relative;padding-left:1.1em;margin-bottom:0.45em;font-size:0.6em;font-weight:500;line-height:1.2;color:var(--text);text-align:left;list-style:none;display:block;}
+.reveal ul li::before{content:'';position:absolute;left:0;top:0.38em;width:6px;height:6px;border-radius:50%;background:var(--teal);}
+.section-label{display:inline-block;font-family:'Courier New',monospace;font-size:0.38em;letter-spacing:0.14em;text-transform:uppercase;color:var(--teal);border:1px solid var(--teal-md);background:var(--teal-lt);border-radius:20px;padding:3px 13px;margin-bottom:0.5em;}
+.title-rule{display:block;width:60px;height:3px;background:var(--teal);margin:0.5em auto 0.6em;border-radius:2px;}
+.subtitle{font-size:0.6em;color:var(--muted);font-style:italic;font-weight:500;}
+.meta{font-size:0.38em;color:var(--muted);margin-top:0.8em;font-weight:500;}
+.cols{display:flex;gap:1.6em;align-items:flex-start;}
+.col{flex:1;min-width:0;}
+.card{background:var(--teal-lt);border-left:3px solid var(--teal);border-radius:4px;padding:0.4em 0.8em;margin-bottom:0.35em;font-size:0.56em;line-height:1.3;color:var(--text);font-style:italic;font-weight:500;}
+.card-plain{background:#fff;border:1px solid #dde8e4;border-radius:6px;padding:0.4em 0.8em;margin-bottom:0.35em;font-size:0.56em;line-height:1.3;color:var(--text);font-weight:500;}
+.card-head{font-style:normal;font-weight:700;color:var(--teal-dk);font-size:1.05em;margin-bottom:0.2em;}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:0.6em;}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.6em;}
+.code-block{background:#f0f4f2;border-left:3px solid var(--teal);border-radius:4px;padding:0.35em 0.8em;font-family:'Courier New',monospace;font-size:0.5em;color:var(--text);line-height:1.55;text-align:left;margin:0.35em 0;}
+.code-label{font-family:'Helvetica Neue',Calibri,Arial,sans-serif;font-size:0.48em;font-weight:600;color:var(--muted);margin-bottom:0.15em;}
+.kw{color:var(--teal);font-weight:700;}.fn{color:#1a6ebd;}.str{color:#b06000;}.cmt{color:var(--muted);font-style:italic;}
+.spectrum-bar{display:flex;border-radius:6px;overflow:hidden;margin:0.5em 0;font-size:0.46em;font-weight:600;}
+.spectrum-item{flex:1;padding:0.5em 0.2em;text-align:center;line-height:1.3;color:#fff;}
+.reveal .progress{color:var(--teal);height:5px;}
+.reveal .slide-number{color:var(--text);font-size:0.5em;font-weight:600;background:rgba(255,255,255,0.85);padding:2px 6px;border-radius:3px;}
+.section-divider h1{color:var(--teal-dk);}
+.section-num{font-family:'Courier New',monospace;font-size:0.42em;color:var(--teal);letter-spacing:0.2em;text-transform:uppercase;margin-bottom:0.3em;}
+.see-also{font-size:0.42em;color:var(--muted);border-top:1px solid var(--teal-md);padding-top:0.45em;margin-top:0.4em;}
+.connect-arrow{display:flex;align-items:center;justify-content:center;font-size:1.3em;color:var(--teal);padding:0.05em 0;}
+.comp-table{width:100%;border-collapse:collapse;font-size:0.5em;}
+.comp-table th{background:var(--teal);color:#fff;padding:0.4em 0.6em;font-weight:600;text-align:center;}
+.comp-table th:first-child{text-align:left;}
+.comp-table td{padding:0.32em 0.6em;border-bottom:1px solid #dde8e4;text-align:center;line-height:1.3;}
+.comp-table td:first-child{text-align:left;font-weight:600;color:var(--teal-dk);}
+.comp-table tr:nth-child(even){background:#f7f9f8;}
+.g{background:#d4edda;color:#155724;}
+.y{background:#fff3cd;color:#856404;}
+.r{background:#f8d7da;color:#721c24;}
+.legend{font-size:0.38em;color:var(--muted);text-align:right;margin-top:0.35em;font-style:italic;}
+.def-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.4em;margin-bottom:0.35em;}
+.def-card{background:#fff;border:1px solid #dde8e4;border-radius:6px;padding:0.35em 0.7em;}
+.def-name{font-size:0.62em;font-weight:700;color:var(--teal-dk);font-family:'Courier New',monospace;margin-bottom:0.2em;}
+.def-what{font-size:0.53em;font-weight:500;color:var(--text);line-height:1.25;margin-bottom:0.15em;}
+.def-example{font-size:0.5em;color:var(--muted);font-style:italic;line-height:1.25;border-top:1px solid var(--teal-md);padding-top:0.15em;margin-top:0.15em;}
+</style>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+<section>
+  <p class="subtitle">CGC-SCIPE &nbsp;·&nbsp; UMCES</p>
+  <h1>Introduction to<br>Data Dashboards</h1>
+  <span class="title-rule"></span>
+  <p class="subtitle">R Shiny &nbsp;·&nbsp; Leaflet &nbsp;·&nbsp; Chesapeake Bay</p>
+  <p class="meta">Burch Fisher &nbsp;·&nbsp; burch.fisher@umces.edu</p>
+
+  <aside class="notes">Welcome everyone. This workshop runs about 3 hours — presentation first, then we open RStudio and walk through the code, then you get hands-on time with an LLM assistant. All the files are in the repo so you can follow along or revisit everything later.</aside>
+</section>
+
+<section class="section-divider">
+  <div class="section-num">Section 1</div>
+  <h1>Framing</h1>
+  <span class="title-rule"></span>
+  <p class="subtitle">What are data dashboards and when should you build one?</p>
+
+  <aside class="notes">Before we define anything, let's look at a few real examples. [Switch to browser tabs and show 2-3 live dashboards.] Keep it brief — the goal is to give people a feel for the range before we get into definitions.</aside>
+</section>
+
+<section>
+  <div class="section-label">Section 1 &mdash; Framing</div>
+  <h2>What is a data dashboard?</h2>
+  <div class="card">An interactive interface that connects a user to a dataset, letting them explore, filter, and interrogate the data without writing code.</div>
+  <div class="cols">
+    <div class="col">
+      <h3>Build a dashboard when&hellip;</h3>
+      <ul>
+        <li>The audience needs to explore, not just read</li>
+        <li>The data updates over time</li>
+        <li>Different users need different views of the same data</li>
+        <li>Spatial or temporal context matters</li>
+      </ul>
+    </div>
+    <div class="col">
+      <h3>Prefer a static report when&hellip;</h3>
+      <ul>
+        <li>Findings are fixed and narrative-driven</li>
+        <li>The audience is not expected to interact</li>
+        <li>Long-term archiving is the priority</li>
+        <li>The figure will appear in print</li>
+      </ul>
+    </div>
+  </div>
+
+  <aside class="notes">The key word is "without writing code" — the user shouldn't need to be an analyst to get value from it. The left column is when a dashboard earns its complexity. The right column is the honest check — a well-designed static figure and a paragraph of text often does the job just as well, and is much easier to maintain.</aside>
+</section>
+
+<section>
+  <div class="section-label">Section 1 &mdash; Framing</div>
+  <h2>Know your audience before you build</h2>
+  <div class="grid3">
+    <div class="card-plain"><div class="card-head">Exploratory</div>Scientists and analysts who want to dig into the data themselves. Needs flexible filtering, raw data access, and download options.</div>
+    <div class="card-plain"><div class="card-head">Operational</div>Managers or field staff who need current status at a glance. Needs simplicity, clear alerts, and fast load times.</div>
+    <div class="card-plain"><div class="card-head">Communicative</div>Public or policy audiences who need a clear story. Needs guided narrative, minimal controls, and polished visuals.</div>
+  </div>
+  <p style="color:var(--muted);font-size:0.52em;margin-top:0.4em;">The same dataset often needs three completely different dashboard designs depending on who is sitting in front of it.</p>
+
+  <aside class="notes">This is probably the most important slide in the whole deck. The same underlying dataset often needs three completely different dashboard designs depending on who sits in front of it. A PI exploring data needs different controls than a program manager checking status, who needs different controls than a public-facing science communication tool. Ask yourself: who is the primary user, and what decision are they trying to make?</aside>
+</section>
+
+<section class="section-divider">
+  <div class="section-num">Section 2</div>
+  <h1>Tool Landscape</h1>
+  <span class="title-rule"></span>
+  <p class="subtitle">Choosing the right tool for the job</p>
+
+  <aside class="notes">This section is a quick survey — we are not going deep on any of these tools except Shiny. The goal is to give you enough vocabulary to make an informed choice and to know what your colleagues are talking about when they mention Streamlit or Observable.</aside>
+</section>
+
+<section>
+  <div class="section-label">Section 2 &mdash; Tool Landscape</div>
+  <h2>Overview of dashboard tools</h2>
+  <div class="grid2">
+    <div class="card-plain"><div class="card-head">R Shiny</div>Full reactive web app in R. Excellent for spatial data, custom layouts, and tight integration with R analysis workflows. Requires a server to share.</div>
+    <div class="card-plain"><div class="card-head">Plotly / Dash</div>Python or R. Great for interactive charts and quick deployment. Dash adds a full app framework on top of Plotly.</div>
+    <div class="card-plain"><div class="card-head">Google Earth Engine Apps</div>Purpose-built for satellite imagery and planetary-scale geospatial data. Free hosting, but locked into the GEE ecosystem and JavaScript API.</div>
+    <div class="card-plain"><div class="card-head">Observable / Quarto / Shinylive</div>Serverless options that run entirely in the browser &mdash; no server required. Shinylive compiles R to WebAssembly; Observable and Quarto use JavaScript. All make tradeoffs on package support and data size.</div>
+  </div>
+  <div class="see-also"><strong>See also:</strong> Flexdashboard (R) &nbsp;·&nbsp; Streamlit (Python) &nbsp;·&nbsp; Bokeh (Python) &nbsp;·&nbsp; Tableau (GUI) &nbsp;·&nbsp; Power BI (GUI) &nbsp;·&nbsp; Grafana (GUI)</div>
+
+  <aside class="notes">A few things worth flagging: Shiny is now available for Python as well as R — the syntax and concepts are nearly identical. Observable and Quarto are interesting because they produce static HTML files with JavaScript interactivity — no server required, hostable on GitHub Pages for free. Shinylive does something similar but actually compiles R to WebAssembly so real R code runs in the browser. We will come back to all of these in the sharing paradigms section.</aside>
+</section>
+
+<section>
+  <div class="section-label">Section 2 &mdash; Tool Landscape</div>
+  <h2>How to choose</h2>
+  <div class="cols">
+    <div class="col">
+      <ul>
+        <li><strong>Language</strong> &mdash; use what your team already knows</li>
+        <li><strong>Data size</strong> &mdash; browser or server?</li>
+        <li><strong>Sharing</strong> &mdash; permanent URL, demo, or embedded?</li>
+        <li><strong>Interactivity</strong> &mdash; simple filters or complex reactivity?</li>
+        <li><strong>Maintenance</strong> &mdash; who owns it after you build it?</li>
+      </ul>
+    </div>
+    <div class="col">
+      <div class="card">
+        <div class="card-head" style="font-style:normal;">Today&rsquo;s focus: R Shiny</div>
+        Best fit for research audiences already working in R, complex spatial data, and dashboards that need to stay in sync with live or updating datasets.<br><br>
+        <em>Note: Shiny is also available for Python &mdash; the syntax and concepts are nearly identical.</em>
+      </div>
+    </div>
+  </div>
+
+  <aside class="notes">The single most important question is language — use what your team already knows. The learning curve for a new framework is real, and the best dashboard is one that gets built and maintained. For research audiences already in R with complex spatial data, Shiny is almost always the right answer. That said, if your collaborators are in Python, Streamlit or Dash might be a better fit for the team even if you personally prefer R.</aside>
+</section>
+
+<section class="section-divider">
+  <div class="section-num">Section 3</div>
+  <h1>Sharing Paradigms</h1>
+  <span class="title-rule"></span>
+  <p class="subtitle">From localhost to the cloud and everywhere in between</p>
+
+  <aside class="notes">This section covers something that trips up a lot of people — they build a great app and then don't know how to share it. The options range from zero effort to significant infrastructure investment. Knowing the spectrum helps you pick the right tool for the right moment.</aside>
+</section>
+
+<section>
+  <div class="section-label">Section 3 &mdash; Sharing Paradigms</div>
+  <h2>The sharing spectrum</h2>
+  <div class="spectrum-bar">
+    <div class="spectrum-item" style="background:#0d6b4e;">Local</div>
+    <div class="spectrum-item" style="background:#0e7a59;">Static</div>
+    <div class="spectrum-item" style="background:#0f8864;">Serverless</div>
+    <div class="spectrum-item" style="background:#10956e;">Tunneled</div>
+    <div class="spectrum-item" style="background:#11a379;">Cloud</div>
+    <div class="spectrum-item" style="background:#12b084;">Institutional</div>
+    <div class="spectrum-item" style="background:#13bc8d;">Container</div>
+    <div class="spectrum-item" style="background:#15c896;">Self-hosted</div>
+  </div>
+  <p style="color:var(--muted);font-size:0.52em;text-align:center;margin:0.3em 0 0.4em;">Complexity, infrastructure requirements, and cost increase left to right.</p>
+  <div class="cols">
+    <div class="col"><div class="card-plain" style="font-size:0.54em;"><strong>Low barrier:</strong> Local and static options require zero infrastructure &mdash; just your machine or a simple file host.</div></div>
+    <div class="col"><div class="card-plain" style="font-size:0.54em;"><strong>Full control:</strong> Container and self-hosted options give maximum flexibility but require you to own and maintain the infrastructure.</div></div>
+  </div>
+
+  <aside class="notes">Complexity, infrastructure, and cost all increase together from left to right. The key insight is that you don't have to start at the right end — local and tunneled options let you share a working app in minutes with zero deployment. You can always move right as your needs grow.</aside>
+</section>
+
+<section>
+  <div class="section-label">Section 3 &mdash; Sharing Paradigms</div>
+  <h2>Comparing your options</h2>
+  <table class="comp-table">
+    <tr><th>Option</th><th>Cost / Staff</th><th>Complexity</th><th>Who can access / limitations</th></tr>
+    <tr><td>Local</td><td class="g">Free, no staff</td><td class="g">None</td><td>Developer only, on their machine</td></tr>
+    <tr><td>Static HTML (GitHub Pages)</td><td class="g">Free, no staff</td><td class="g">Minimal</td><td>Anyone with URL, no server-side computation</td></tr>
+    <tr><td>Serverless (Shinylive, Observable, Quarto)</td><td class="g">Free, no staff</td><td class="y">Build step</td><td>Anyone, but data must be bundled and packages are limited</td></tr>
+    <tr><td>Tunneled (ngrok)</td><td class="g">Free tier</td><td class="y">Some setup required</td><td>Anyone with URL, temporary &mdash; app dies when laptop closes</td></tr>
+    <tr><td>Cloud (shinyapps.io, Plotly, AWS)*</td><td class="y">Free tier / paid</td><td class="y">Deploy step</td><td>Anyone, permanent URL, compute limits vary by platform</td></tr>
+    <tr><td>Institutional (Posit Connect, Shiny Server)*</td><td class="g">Free to user</td><td class="y">IT dependency</td><td>Network / VPN access, depends on IT setup</td></tr>
+    <tr><td>Container (Docker)</td><td class="y">Hosting cost + setup time</td><td class="r">DevOps knowledge required</td><td>Anyone, full control over environment</td></tr>
+    <tr><td>Self-hosted</td><td class="r">Server + ongoing staff</td><td class="r">Full stack</td><td>Anyone, maximum control and flexibility</td></tr>
+  </table>
+  <div class="legend">Green = favorable &nbsp;·&nbsp; Yellow = moderate tradeoff &nbsp;·&nbsp; Red = significant constraint</div>
+  <div class="legend" style="margin-top:0.2em;">*Python equivalents include Streamlit Community Cloud (cloud) and Voila / JupyterHub (institutional)</div>
+
+  <aside class="notes">Worth calling out the asterisked rows — Cloud and Institutional both have Python equivalents. For Cloud, Streamlit Community Cloud and Plotly Chart Studio are the closest equivalents to shinyapps.io. For Institutional, Voila running through JupyterHub is the most common Python path in a university setting. The self-hosted row is red across the board not because it is bad, but because it requires the most from you — a real server, ongoing maintenance, and someone who knows what they are doing.</aside>
+</section>
+
+<section>
+  <div class="section-label">Section 3 &mdash; Sharing Paradigms</div>
+  <h2>Local, static &amp; tunneled</h2>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.6em;margin-bottom:0.5em;">
+    <div class="card-plain"><div class="card-head">1. Local (localhost)</div>Default when you click Run App in RStudio. Only accessible on your machine. Zero setup. Good for development and testing.</div>
+    <div class="card-plain"><div class="card-head">2. Static HTML (GitHub Pages)</div>Pre-built HTML file with embedded JavaScript. No server needed. Interactivity limited to reorganizing pre-loaded data &mdash; no runtime computation.</div>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:0.6em;align-items:start;">
+    <div class="card-plain" style="margin-bottom:0;"><div class="card-head">3. Tunneled &mdash; ngrok</div>Creates a public URL that forwards to your locally running app. Your computer does all the computation &mdash; ngrok just tunnels whatever is running on that port. Free tier gives a temporary URL that changes each session.</div>
+    <div style="display:flex;flex-direction:column;margin-bottom:0;margin-top:0;">
+      <div class="code-block" style="flex:1;margin-bottom:0.3em;margin-top:0;"><span class="cmt"># One-time setup</span><br>ngrok config add-authtoken TOKEN<br><br><span class="cmt"># Each session</span><br>ngrok http 4533<br><br><span class="cmt"># Share this URL:</span><br><span class="str">https://abc123.ngrok-free.app</span></div>
+      <p style="color:var(--muted);font-size:0.5em;margin-top:0.2em;">Works for any framework &mdash; Shiny, Streamlit, Flask, or anything else running on that port.</p>
+    </div>
+  </div>
+
+  <aside class="notes">Key point about ngrok: your computer is doing ALL the computation. If 20 people open your ngrok URL simultaneously, all 20 sessions are running on your laptop — your CPU, your RAM, your internet connection. It also means if you close your laptop, the app dies. ngrok is framework agnostic — it just tunnels whatever is on that port. You could even run it from a Colab notebook instead of a terminal. Great for demos and quick sharing, not for anything long-term.</aside>
+</section>
+
+<section>
+  <div class="section-label">Section 3 &mdash; Sharing Paradigms</div>
+  <h2>Cloud hosted &amp; serverless</h2>
+  <div class="cols">
+    <div class="col">
+      <div class="card-plain"><div class="card-head">4. Cloud hosted &mdash; shinyapps.io</div>Permanent public URL. Runs independently of your laptop. Free tier: 5 apps, 25 active hours/month. One command to deploy.</div>
+      <div class="card-plain"><div class="card-head">5. Serverless &mdash; Shinylive, Observable, Quarto</div>All run entirely in the browser with no server required and can be hosted on GitHub Pages for free. Unlike static HTML, Shinylive can execute real code on demand in the browser. Shared tradeoffs: all data must be bundled with the app, large datasets are not practical, and package support is limited.</div>
+    </div>
+    <div class="col">
+      <div class="code-block"><span class="cmt"># Deploy to shinyapps.io</span><br><span class="fn">library</span>(<span class="str">rsconnect</span>)<br>rsconnect::<span class="fn">deployApp</span>()<br><br><span class="cmt"># Your app gets a URL like:</span><br><span class="str">yourname.shinyapps.io/appname</span></div>
+    </div>
+  </div>
+
+  <aside class="notes">The key distinction between Static HTML and Serverless: static HTML can only reorganize data that was already baked into the file at build time — no new computation happens. Shinylive actually executes R code on demand in the browser via WebAssembly, so users can trigger real calculations. All three — Shinylive, Observable, and Quarto — can be hosted on GitHub Pages for free, which is a big advantage. The shared tradeoff is that all data must be bundled with the file, so large datasets are not practical.</aside>
+</section>
+
+<section>
+  <div class="section-label">Section 3 &mdash; Sharing Paradigms</div>
+  <h2>Other sharing options</h2>
+  <div class="grid3">
+    <div class="card-plain"><div class="card-head">6. Container &mdash; Docker</div>Packages the app and its entire application environment into a container that runs identically anywhere. Solves the &ldquo;works on my laptop&rdquo; problem.</div>
+    <div class="card-plain"><div class="card-head">7. Institutional server</div>Many universities run Shiny Server, Posit Connect, or JupyterHub. Common when data cannot leave the institution. Contact your research computing group.</div>
+    <div class="card-plain"><div class="card-head">8. Self-hosted</div>You own the server, the infrastructure, and the maintenance. Maximum control and flexibility. A raw VPS with your own application process and web server.</div>
+  </div>
+  <p style="color:var(--muted);font-size:0.48em;margin-top:0.4em;text-align:center;">Once hosted, your app can also be embedded in any webpage via an iframe.</p>
+
+  <aside class="notes">Posit Connect vs Shiny Server: Shiny Server is free and open source but serves Shiny only. Posit Connect is the paid enterprise version that adds authentication, Python support, scheduled reports, and fine-grained access control. Many universities already have one of these — worth asking your IT or research computing group before standing up your own infrastructure. Docker is powerful but requires real DevOps knowledge — the payoff is that your app runs identically anywhere.</aside>
+</section>
+
+<section class="section-divider">
+  <div class="section-num">Section 4</div>
+  <h1>Large Data Considerations</h1>
+  <span class="title-rule"></span>
+  <p class="subtitle">What happens when your data outgrows the browser</p>
+
+  <aside class="notes">This section is context-setting for the demo app we are about to walk through. The NLCD raster in today's app is deliberately downsampled to ~150m so it fits in the browser — in a production app serving a full-resolution nationwide dataset you would need one of the strategies we are about to cover.</aside>
+</section>
+
+<section>
+  <div class="section-label">Section 4 &mdash; Large Data</div>
+  <h2>Browser rendering limits</h2>
+  <div class="cols">
+    <div class="col">
+      <ul>
+        <li>Browsers render everything as pixels in memory &mdash; a 30m nationwide raster is gigabytes before it reaches the screen</li>
+        <li>Leaflet limits raster file sizes for a reason &mdash; large images will fail to render or crash the browser</li>
+        <li>Large vector datasets with millions of points or complex polygons also slow the browser</li>
+        <li>Rule of thumb: if the file is over ~5MB, you need a strategy</li>
+      </ul>
+    </div>
+    <div class="col">
+      <div class="card">
+        <div class="card-head" style="font-style:normal;">Strategies</div>
+        Aggregate on the server before sending to the client<br><br>
+        Simplify geometries with <code>st_simplify()</code><br><br>
+        Downsample rasters with <code>aggregate()</code><br><br>
+        Use a tile server or COG
+      </div>
+    </div>
+  </div>
+
+  <aside class="notes">The rule of thumb is ~5MB — above that you need a strategy. This applies to both rasters and vectors. A shapefile of detailed US county boundaries can easily be 50MB+. The browser does not care what the data represents — it has to render every vertex, every pixel. Simplification and aggregation are almost always the right first step before reaching for a tile server.</aside>
+</section>
+
+<section>
+  <div class="section-label">Section 4 &mdash; Large Data</div>
+  <h2>Large Raster Handling</h2>
+  <div class="card">A tile server pre-slices a raster into 256&times;256px tiles at multiple zoom levels. The browser only fetches tiles for the current viewport &mdash; never the whole image at once. This is exactly how Google Maps and satellite basemaps work.</div>
+  <div class="card-plain">
+    <div class="card-head">Options in R / open source</div>
+    <div style="display:flex;flex-wrap:wrap;gap:0.4em;margin-top:0.3em;">
+      <span style="background:var(--teal-lt);border:1px solid var(--teal-md);border-radius:4px;padding:0.2em 0.6em;font-size:0.88em;"><strong>COG</strong> &mdash; Cloud Optimized GeoTIFF. No server needed &mdash; the file itself is structured so clients fetch only the bytes they need</span>
+      <span style="background:var(--teal-lt);border:1px solid var(--teal-md);border-radius:4px;padding:0.2em 0.6em;font-size:0.88em;"><strong>Zarr</strong> &mdash; Cloud-native chunked array format ideal for multidimensional data (time &times; lat &times; lon). Like COG but for raster time series. Used by ERA5, CMIP6, and other major climate datasets</span>
+      <span style="background:var(--teal-lt);border:1px solid var(--teal-md);border-radius:4px;padding:0.2em 0.6em;font-size:0.88em;"><strong>titiler</strong> &mdash; modern cloud-native tile server</span>
+      <span style="background:var(--teal-lt);border:1px solid var(--teal-md);border-radius:4px;padding:0.2em 0.6em;font-size:0.88em;"><strong>GeoServer</strong> &mdash; full-featured open source tile server</span>
+      <span style="background:var(--teal-lt);border:1px solid var(--teal-md);border-radius:4px;padding:0.2em 0.6em;font-size:0.88em;"><strong>gdal2tiles</strong> &mdash; pre-generate static tile directories</span>
+    </div>
+  </div>
+  <div class="card-plain" style="margin-top:0.3em;">
+    <div class="card-head">Today&rsquo;s workshop</div>
+    We use a coarse-resolution NLCD raster (~150m) that fits within Leaflet&rsquo;s limits. This keeps setup simple while demonstrating the same raster-vector query concepts you would use with a tile-served layer.
+  </div>
+
+  <aside class="notes">COG is worth highlighting specifically — unlike the other options here, it requires no server infrastructure at all. A COG is just a specially formatted GeoTIFF that supports HTTP range requests, so the browser fetches only the bytes it needs for the current viewport. You can host it on S3 or GitHub and get tile-server-like behavior for free. Zarr is the equivalent for multidimensional data — think daily temperature grids over 40 years. Major climate datasets like ERA5 and CMIP6 are increasingly distributed as Zarr on cloud storage.</aside>
+</section>
+
+<section>
+  <div class="section-label">Section 4 &mdash; Large Data</div>
+  <h2>Large Vector Handling</h2>
+  <div class="grid2">
+    <div class="card-plain" style="text-align:left;">
+      <div class="card-head">Simplify before it hits the browser</div>
+      Reduce vertex count with <code>st_simplify()</code> &mdash; usually invisible to the eye, dramatically faster to render.<br><br>
+      Aggregate spatially &mdash; send county summaries, not parcel-level detail.
+    </div>
+    <div class="card-plain" style="text-align:left;">
+      <div class="card-head">Efficient vector formats</div>
+      <strong>FlatGeobuf</strong> &mdash; like COG for vectors. HTTP range requests fetch only the extent needed. No server, just a static file.<br><br>
+      <strong>PMTiles</strong> &mdash; vector tiles in a single file, hostable on S3 or GitHub Pages.<br><br>
+      <strong>GeoParquet</strong> &mdash; columnar spatial storage, fast for attribute queries.
+    </div>
+  </div>
+  <div style="display:flex;align-items:center;justify-content:center;gap:2em;margin-top:0.6em;">
+    <div style="text-align:center;">
+      <svg width="250" height="144" viewBox="0 0 200 115" xmlns="http://www.w3.org/2000/svg">
+        <text x="100" y="13" text-anchor="middle" font-size="12" font-weight="600" fill="#6b8c82" font-family="Helvetica Neue,Calibri,Arial,sans-serif">complex geometry</text>
+        <polygon points="30,97 22,74 33,60 26,44 42,30 58,38 69,26 83,33 91,22 103,30 109,45 97,57 104,71 92,83 74,90 58,97 43,93" fill="#e8f7f2" stroke="#0e9e73" stroke-width="2"/>
+        <circle cx="30" cy="97" r="3" fill="#0e9e73"/><circle cx="22" cy="74" r="3" fill="#0e9e73"/>
+        <circle cx="33" cy="60" r="3" fill="#0e9e73"/><circle cx="26" cy="44" r="3" fill="#0e9e73"/>
+        <circle cx="42" cy="30" r="3" fill="#0e9e73"/><circle cx="58" cy="38" r="3" fill="#0e9e73"/>
+        <circle cx="69" cy="26" r="3" fill="#0e9e73"/><circle cx="83" cy="33" r="3" fill="#0e9e73"/>
+        <circle cx="91" cy="22" r="3" fill="#0e9e73"/><circle cx="103" cy="30" r="3" fill="#0e9e73"/>
+        <circle cx="109" cy="45" r="3" fill="#0e9e73"/><circle cx="97" cy="57" r="3" fill="#0e9e73"/>
+        <circle cx="104" cy="71" r="3" fill="#0e9e73"/><circle cx="92" cy="83" r="3" fill="#0e9e73"/>
+        <circle cx="74" cy="90" r="3" fill="#0e9e73"/><circle cx="58" cy="97" r="3" fill="#0e9e73"/>
+        <circle cx="43" cy="93" r="3" fill="#0e9e73"/>
+        <text x="100" y="112" text-anchor="middle" font-size="11" font-weight="600" fill="#6b8c82" font-family="Helvetica Neue,Calibri,Arial,sans-serif">17 vertices</text>
+      </svg>
+    </div>
+    <div style="text-align:center;">
+      <svg width="112" height="144" viewBox="0 0 90 115" xmlns="http://www.w3.org/2000/svg">
+        <text x="45" y="44" text-anchor="middle" font-size="11" font-weight="600" fill="#0a7a58" font-family="Courier New,monospace">st_simplify()</text>
+        <line x1="6" y1="60" x2="72" y2="60" stroke="#0e9e73" stroke-width="2.5"/>
+        <polygon points="72,54 82,60 72,66" fill="#0e9e73"/>
+      </svg>
+    </div>
+    <div style="text-align:center;">
+      <svg width="250" height="144" viewBox="0 0 200 115" xmlns="http://www.w3.org/2000/svg">
+        <text x="100" y="13" text-anchor="middle" font-size="12" font-weight="600" fill="#6b8c82" font-family="Helvetica Neue,Calibri,Arial,sans-serif">simplified geometry</text>
+        <polygon points="30,97 26,44 69,26 103,30 109,45 92,83 58,97" fill="#e8f7f2" stroke="#0e9e73" stroke-width="2"/>
+        <circle cx="30" cy="97" r="3" fill="#0e9e73"/><circle cx="26" cy="44" r="3" fill="#0e9e73"/>
+        <circle cx="69" cy="26" r="3" fill="#0e9e73"/><circle cx="103" cy="30" r="3" fill="#0e9e73"/>
+        <circle cx="109" cy="45" r="3" fill="#0e9e73"/><circle cx="92" cy="83" r="3" fill="#0e9e73"/>
+        <circle cx="58" cy="97" r="3" fill="#0e9e73"/>
+        <text x="100" y="112" text-anchor="middle" font-size="11" font-weight="600" fill="#6b8c82" font-family="Helvetica Neue,Calibri,Arial,sans-serif">7 vertices</text>
+      </svg>
+    </div>
+  </div>
+
+  <aside class="notes">FlatGeobuf and PMTiles are the COG equivalents for vector data — both support HTTP range requests and require no server. FlatGeobuf is great for simple feature collections. PMTiles is better when you need tiled vector rendering at multiple zoom levels. The simplification approach with st_simplify() is often the easiest win — a tolerance of 0.001 degrees (~100m) is usually invisible to the eye but can reduce file size by 80% or more.</aside>
+</section>
+
+<section>
+  <div class="section-label">Section 4 &mdash; Large Data</div>
+  <h2>Large Tabular Data</h2>
+  <div class="card">When your dataset is too large to load into memory, or you have millions of rows to render as points, you need tools designed for that scale.</div>
+  <div class="grid2">
+    <div class="card-plain" style="text-align:left;">
+      <div class="card-head">Query instead of load</div>
+      <strong>DuckDB</strong> &mdash; runs SQL on large Parquet or CSV files directly in your analysis environment. Send only the query result to the browser.<br><br>
+      <strong>Apache Parquet</strong> &mdash; columnar format, far faster than CSV for reading subsets. Pairs naturally with DuckDB.
+    </div>
+    <div class="card-plain" style="text-align:left;">
+      <div class="card-head">Render at scale</div>
+      <strong>Datashader (HoloViz)</strong> &mdash; renders millions of points as a rasterized heatmap rather than individual markers. Handles genuinely massive datasets.<br><br>
+      <strong>DeckGL / Observable Plot</strong> &mdash; GPU-accelerated rendering of large point clouds directly in the browser.
+    </div>
+  </div>
+  <div style="display:flex;align-items:center;justify-content:center;gap:2em;margin-top:0.6em;">
+    <div style="text-align:center;">
+      <svg width="250" height="144" viewBox="0 0 200 115" xmlns="http://www.w3.org/2000/svg">
+        <text x="100" y="13" text-anchor="middle" font-size="12" font-weight="600" fill="#6b8c82" font-family="Helvetica Neue,Calibri,Arial,sans-serif">millions of points</text>
+        <rect x="10" y="18" width="180" height="84" rx="3" fill="#f7f9f8" stroke="#dde8e4" stroke-width="1"/>
+        <!-- sparse lower-left -->
+        <circle cx="25" cy="88" r="1.8" fill="#0e9e73" opacity="0.5"/>
+        <circle cx="35" cy="80" r="1.8" fill="#0e9e73" opacity="0.5"/>
+        <circle cx="28" cy="72" r="1.8" fill="#0e9e73" opacity="0.5"/>
+        <circle cx="45" cy="90" r="1.8" fill="#0e9e73" opacity="0.5"/>
+        <circle cx="52" cy="78" r="1.8" fill="#0e9e73" opacity="0.5"/>
+        <circle cx="40" cy="68" r="1.8" fill="#0e9e73" opacity="0.5"/>
+        <!-- medium center -->
+        <circle cx="90" cy="60" r="1.8" fill="#0e9e73" opacity="0.75"/>
+        <circle cx="100" cy="52" r="1.8" fill="#0e9e73" opacity="0.75"/>
+        <circle cx="85" cy="48" r="1.8" fill="#0e9e73" opacity="0.75"/>
+        <circle cx="108" cy="62" r="1.8" fill="#0e9e73" opacity="0.75"/>
+        <circle cx="95" cy="42" r="1.8" fill="#0e9e73" opacity="0.75"/>
+        <circle cx="112" cy="50" r="1.8" fill="#0e9e73" opacity="0.75"/>
+        <!-- dense upper-right -->
+        <circle cx="138" cy="28" r="1.8" fill="#0e9e73" opacity="0.95"/>
+        <circle cx="148" cy="23" r="1.8" fill="#0e9e73" opacity="0.95"/>
+        <circle cx="155" cy="31" r="1.8" fill="#0e9e73" opacity="0.95"/>
+        <circle cx="162" cy="25" r="1.8" fill="#0e9e73" opacity="0.95"/>
+        <circle cx="143" cy="36" r="1.8" fill="#0e9e73" opacity="0.95"/>
+        <circle cx="158" cy="38" r="1.8" fill="#0e9e73" opacity="0.95"/>
+        <circle cx="168" cy="30" r="1.8" fill="#0e9e73" opacity="0.95"/>
+        <circle cx="150" cy="44" r="1.8" fill="#0e9e73" opacity="0.95"/>
+        <circle cx="162" cy="44" r="1.8" fill="#0e9e73" opacity="0.95"/>
+        <circle cx="172" cy="36" r="1.8" fill="#0e9e73" opacity="0.95"/>
+        <circle cx="145" cy="22" r="1.8" fill="#0e9e73" opacity="0.95"/>
+        <circle cx="170" cy="24" r="1.8" fill="#0e9e73" opacity="0.95"/>
+        <text x="100" y="112" text-anchor="middle" font-size="11" font-weight="600" fill="#6b8c82" font-family="Helvetica Neue,Calibri,Arial,sans-serif">browser struggles</text>
+      </svg>
+    </div>
+    <div style="text-align:center;">
+      <svg width="112" height="144" viewBox="0 0 90 115" xmlns="http://www.w3.org/2000/svg">
+        <text x="45" y="44" text-anchor="middle" font-size="11" font-weight="600" fill="#0a7a58" font-family="Courier New,monospace">Datashader</text>
+        <line x1="6" y1="60" x2="72" y2="60" stroke="#0e9e73" stroke-width="2.5"/>
+        <polygon points="72,54 82,60 72,66" fill="#0e9e73"/>
+      </svg>
+    </div>
+    <div style="text-align:center;">
+      <svg width="250" height="144" viewBox="0 0 200 115" xmlns="http://www.w3.org/2000/svg">
+        <text x="100" y="13" text-anchor="middle" font-size="12" font-weight="600" fill="#6b8c82" font-family="Helvetica Neue,Calibri,Arial,sans-serif">rasterized heatmap</text>
+        <rect x="10" y="18" width="180" height="84" rx="3" fill="#f7f9f8" stroke="#dde8e4" stroke-width="1"/>
+        <!-- 4 cols x 2 rows matching point density above -->
+        <!-- col boundaries: 10,55,100,145,190 -->
+        <!-- row boundaries: 18,60,102 -->
+        <!-- Row 1 (top, y=18-60): col1=none/white, col2=low, col3=med, col4=hot -->
+        <rect x="10"  y="18" width="45" height="42" fill="#f7f9f8"/>
+        <rect x="55"  y="18" width="45" height="42" fill="#b2dfd1" opacity="0.5"/>
+        <rect x="100" y="18" width="45" height="42" fill="#1d9e75" opacity="0.65"/>
+        <rect x="145" y="18" width="45" height="42" fill="#0a7a58" opacity="0.9"/>
+        <!-- Row 2 (bottom, y=60-102): col1=low, col2=low, col3=none/white, col4=none/white -->
+        <rect x="10"  y="60" width="45" height="42" fill="#b2dfd1" opacity="0.45"/>
+        <rect x="55"  y="60" width="45" height="42" fill="#e8f7f2" opacity="0.6"/>
+        <rect x="100" y="60" width="45" height="42" fill="#f7f9f8"/>
+        <rect x="145" y="60" width="45" height="42" fill="#f7f9f8"/>
+        <!-- grid lines -->
+        <line x1="55"  y1="18" x2="55"  y2="102" stroke="#dde8e4" stroke-width="0.5"/>
+        <line x1="100" y1="18" x2="100" y2="102" stroke="#dde8e4" stroke-width="0.5"/>
+        <line x1="145" y1="18" x2="145" y2="102" stroke="#dde8e4" stroke-width="0.5"/>
+        <line x1="10"  y1="60" x2="190" y2="60"  stroke="#dde8e4" stroke-width="0.5"/>
+        <text x="100" y="112" text-anchor="middle" font-size="11" font-weight="600" fill="#6b8c82" font-family="Helvetica Neue,Calibri,Arial,sans-serif">renders instantly</text>
+      </svg>
+    </div>
+  </div>
+
+  <aside class="notes">DuckDB is a game changer for large tabular data — it can query a 10GB Parquet file in seconds without loading it into memory. The pattern is: DuckDB runs the query server-side in R or Python, and only the aggregated result gets sent to the browser. Datashader takes a different approach — instead of reducing the data, it renders all of it as a rasterized heatmap image. The browser receives an image, not millions of individual points, so rendering is instant regardless of dataset size.</aside>
+</section>
+
+<section class="section-divider">
+  <div class="section-num">Section 5</div>
+  <h1>R Shiny Syntax<br>&amp; Concepts</h1>
+  <span class="title-rule"></span>
+  <p class="subtitle">The vocabulary you need before you open RStudio</p>
+
+  <aside class="notes">We are now shifting gears into the vocabulary you will need when we open RStudio. This section is intentionally brief — the goal is to give you just enough to orient yourself in the code, not to make you a Shiny expert. The code walkthrough in Part 2 is where the real learning happens.</aside>
+</section>
+
+<section>
+  <div class="section-label">Section 5 &mdash; R Shiny</div>
+  <h2>Every Shiny app has two parts</h2>
+  <div class="cols">
+    <div class="col">
+      <div class="card-plain"><div class="card-head">UI &mdash; the layout</div>Sets the layout and appearance of the app. Defines input widgets users can interact with and output placeholders the server fills in. Evaluated once at startup &mdash; no data, no logic, no computation.</div>
+      <div class="code-block"><span class="fn">ui</span> &lt;- <span class="fn">fluidPage</span>(<br>&nbsp;&nbsp;<span class="fn">selectInput</span>(<span class="str">"variable"</span>, ...),<br>&nbsp;&nbsp;<span class="fn">leafletOutput</span>(<span class="str">"map"</span>),<br>&nbsp;&nbsp;<span class="fn">plotlyOutput</span>(<span class="str">"ts_plot"</span>)<br>)</div>
+    </div>
+    <div class="col">
+      <div class="card-plain"><div class="card-head">Server &mdash; the brains</div>A function that runs once per user session. Reads inputs, computes results, writes to outputs. Everything inside participates in the reactive graph.</div>
+      <div class="code-block"><span class="fn">server</span> &lt;- <span class="kw">function</span>(input, output, session) {<br>&nbsp;&nbsp;output$map &lt;- <span class="fn">renderLeaflet</span>({ ... })<br>&nbsp;&nbsp;output$ts_plot &lt;- <span class="fn">renderPlotly</span>({ ... })<br>}</div>
+    </div>
+  </div>
+
+  <aside class="notes">The UI is evaluated once at startup — it is just a description of the layout, like an HTML template. No data, no logic. The server is where everything happens — it runs once per user session and participates in the reactive graph. A key insight: data should be loaded OUTSIDE the server function if possible, so it is read into memory once and shared across all sessions rather than re-read on every reactive update.</aside>
+</section>
+
+<section>
+  <div class="section-label">Section 5 &mdash; R Shiny</div>
+  <h2>Inputs and outputs are the wires</h2>
+  <div class="cols">
+    <div class="col">
+      <h3>Inputs &mdash; what users control</h3>
+      <div class="code-block"><span class="cmt"># Dropdown</span><br><span class="fn">selectInput</span>(<span class="str">"variable"</span>, ...)<br><br><span class="cmt"># Date range slider</span><br><span class="fn">sliderInput</span>(<span class="str">"date_range"</span>, ...)<br><br><span class="cmt"># Checkbox</span><br><span class="fn">checkboxInput</span>(<span class="str">"show_nlcd"</span>, ...)</div>
+      <p style="color:var(--muted);font-size:0.5em;margin-top:0.25em;">The server reads these as <code>input$variable</code>, <code>input$date_range</code>, etc.</p>
+    </div>
+    <div class="col">
+      <h3>Outputs &mdash; rendered results</h3>
+      <div class="code-label">In the UI &mdash; empty placeholder:</div>
+      <div class="code-block"><span class="fn">leafletOutput</span>(<span class="str">"map"</span>)</div>
+      <div class="connect-arrow">&#8595;</div>
+      <div class="code-label">In the server &mdash; fill it in:</div>
+      <div class="code-block">output$map &lt;- <span class="fn">renderLeaflet</span>({<br>&nbsp;&nbsp;<span class="fn">leaflet</span>() |&gt; <span class="fn">addTiles</span>()<br>})</div>
+      <p style="color:var(--muted);font-size:0.5em;margin-top:0.25em;">The ID <code>"map"</code> in the UI must exactly match <code>output$map</code> in the server.</p>
+    </div>
+  </div>
+
+  <aside class="notes">The inputId and outputId strings are the wiring between UI and server. If they do not match exactly — including case — nothing will render and you will get a silent failure. This is one of the most common beginner mistakes. The arrow between the two code blocks on the right shows this connection — the "map" string in the UI placeholder must match the output$map name in the server exactly.</aside>
+</section>
+
+<section>
+  <div class="section-label">Section 5 &mdash; R Shiny</div>
+  <h2>Reactivity: the engine of Shiny</h2>
+  <div class="def-row">
+    <div class="def-card">
+      <div class="def-name">reactive()</div>
+      <div class="def-what">Computes and caches a derived value. Re-runs automatically when its inputs change.</div>
+      <div class="def-example">Filters water quality data to the selected parameter and date range</div>
+    </div>
+    <div class="def-card">
+      <div class="def-name">observeEvent()</div>
+      <div class="def-what">Triggers a side effect when an event fires. Returns nothing.</div>
+      <div class="def-example">When you click a station marker, stores that station as the selected one</div>
+    </div>
+    <div class="def-card">
+      <div class="def-name">render*()</div>
+      <div class="def-what">A special reactive wired to a UI output placeholder. Produces visible output.</div>
+      <div class="def-example">Draws the time series plot for the selected station and parameter</div>
+    </div>
+  </div>
+  <p style="color:var(--muted);font-size:0.52em;margin-top:0.5em;">When an input changes, Shiny automatically re-runs every expression that depends on it &mdash; and only those expressions. Dependencies are tracked automatically; you never declare what depends on what.</p>
+
+  <aside class="notes">Reactivity is not unique to Shiny — Observable has a very similar model, Dash has callbacks, and Vue/React in JavaScript are built on the same idea. What makes Shiny distinctive is that you never have to declare what depends on what — Shiny figures out the dependency graph automatically. In Dash, for example, you explicitly declare which inputs and outputs each callback connects. In Shiny you just read input$variable inside a reactive() and Shiny knows to re-run it when that input changes.</aside>
+</section>
+
+<section>
+  <div class="section-label">Section 5 &mdash; R Shiny</div>
+  <h2>Reactivity in code</h2>
+  <div class="cols">
+    <div class="col">
+      <div class="code-block"><span class="cmt"># reactive() &mdash; computes filtered data</span><br>wq_filtered &lt;- <span class="fn">reactive</span>({<br>&nbsp;&nbsp;wq |&gt; <span class="fn">filter</span>(parameter == input$variable)<br>})<br><br><span class="cmt"># render*() &mdash; produces the time series plot</span><br>output$ts_plot &lt;- <span class="fn">renderPlotly</span>({<br>&nbsp;&nbsp;<span class="fn">plot_ly</span>(<span class="fn">wq_station</span>(), ...)<br>})</div>
+    </div>
+    <div class="col">
+      <div class="code-block"><span class="cmt"># observeEvent() &mdash; responds to map click</span><br><span class="fn">observeEvent</span>(input$map_marker_click, {<br>&nbsp;&nbsp;rv$selected_station &lt;-<br>&nbsp;&nbsp;&nbsp;&nbsp;input$map_marker_click$id<br>})</div>
+      <div class="card" style="margin-top:0.5em;">
+        <strong style="font-style:normal;">The chain in action:</strong><br>
+        Click a marker &rarr; <code>observeEvent</code> stores the station &rarr; <code>reactive</code> filters its data &rarr; <code>renderPlotly</code> draws the plot
+      </div>
+    </div>
+  </div>
+
+  <aside class="notes">The chain shown here is exactly what happens in mini_app.R when you click a station marker: the observeEvent fires and stores the station ID, which invalidates the reactive() that filters data for that station, which causes renderPlotly() to re-run and draw the updated time series. Three functions, one user action, zero manual wiring. This is the core of what makes Shiny powerful.</aside>
+</section>
+
+<section>
+  <div class="section-label">Section 5 &mdash; R Shiny</div>
+  <h2>Reactive linkages in mini_app.R</h2>
+  <div style="text-align:center;margin-top:0.3em;">
+    <img src="mini_app_reactive_linkages.svg" style="max-width:90%;max-height:420px;object-fit:contain;" alt="mini_app reactive linkage diagram">
+  </div>
+
+  <aside class="notes">This diagram shows every reactive connection in mini_app.R. Trace any arrow and you can follow exactly what triggers what. We will walk through this code in a few minutes — keep this diagram in mind as a navigation aid. The full app.R has a similar diagram in the repo that shows a more complex version of the same patterns.</aside>
+</section>
+
+<section>
+  <h2>Resources &amp; links</h2>
+  <div class="card" style="margin-bottom:0.4em;font-style:normal;">
+    Clickable links for tools and resources covered in this workshop, organized by ecosystem. This is not an exhaustive list &mdash; the dashboard and geospatial ecosystems are large and evolving rapidly.
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.5em;font-size:0.46em;">
+
+    <div class="card-plain" style="text-align:left;">
+      <div class="card-head" style="font-size:1.1em;margin-bottom:0.3em;">Dashboard tools</div>
+      <a href="https://shiny.posit.co/r/getstarted/" style="color:var(--teal-dk);display:block;" target="_blank">R Shiny docs</a>
+      <a href="https://mastering-shiny.org/" style="color:var(--teal-dk);display:block;" target="_blank">Mastering Shiny (free book)</a>
+      <a href="https://shinylive.io/r/" style="color:var(--teal-dk);display:block;" target="_blank">Shinylive</a>
+      <a href="https://rstudio.github.io/leaflet/" style="color:var(--teal-dk);display:block;" target="_blank">Leaflet for R</a>
+      <a href="https://plotly.com/r/" style="color:var(--teal-dk);display:block;" target="_blank">Plotly for R</a>
+      <a href="https://rstudio.github.io/shinydashboard/" style="color:var(--teal-dk);display:block;" target="_blank">shinydashboard</a>
+      <a href="https://streamlit.io/" style="color:var(--teal-dk);display:block;" target="_blank">Streamlit</a>
+      <a href="https://dash.plotly.com/" style="color:var(--teal-dk);display:block;" target="_blank">Plotly Dash</a>
+      <a href="https://panel.holoviz.org/" style="color:var(--teal-dk);display:block;" target="_blank">Panel (HoloViz)</a>
+      <a href="https://bokeh.org/" style="color:var(--teal-dk);display:block;" target="_blank">Bokeh</a>
+      <a href="https://observablehq.com/" style="color:var(--teal-dk);display:block;" target="_blank">Observable</a>
+      <a href="https://quarto.org/" style="color:var(--teal-dk);display:block;" target="_blank">Quarto</a>
+    </div>
+
+    <div class="card-plain" style="text-align:left;">
+      <div class="card-head" style="font-size:1.1em;margin-bottom:0.3em;">Geospatial &amp; data</div>
+      <a href="https://r-spatial.github.io/sf/" style="color:var(--teal-dk);display:block;" target="_blank">sf (R)</a>
+      <a href="https://rspatial.org/terra/" style="color:var(--teal-dk);display:block;" target="_blank">terra (R)</a>
+      <a href="https://rstudio.github.io/DT/" style="color:var(--teal-dk);display:block;" target="_blank">DT (R)</a>
+      <a href="https://cogeo.org/" style="color:var(--teal-dk);display:block;" target="_blank">Cloud Optimized GeoTIFF (COG)</a>
+      <a href="https://zarr.dev/" style="color:var(--teal-dk);display:block;" target="_blank">Zarr</a>
+      <a href="https://flatgeobuf.org/" style="color:var(--teal-dk);display:block;" target="_blank">FlatGeobuf</a>
+      <a href="https://protomaps.com/docs/pmtiles/" style="color:var(--teal-dk);display:block;" target="_blank">PMTiles</a>
+      <a href="https://geoparquet.org/" style="color:var(--teal-dk);display:block;" target="_blank">GeoParquet</a>
+      <a href="https://parquet.apache.org/" style="color:var(--teal-dk);display:block;" target="_blank">Apache Parquet</a>
+      <a href="https://duckdb.org/" style="color:var(--teal-dk);display:block;" target="_blank">DuckDB</a>
+      <a href="https://datashader.org/" style="color:var(--teal-dk);display:block;" target="_blank">Datashader</a>
+      <a href="https://developmentseed.org/titiler/" style="color:var(--teal-dk);display:block;" target="_blank">titiler</a>
+    </div>
+
+    <div class="card-plain" style="text-align:left;">
+      <div class="card-head" style="font-size:1.1em;margin-bottom:0.3em;">Hosting &amp; sharing</div>
+      <a href="https://www.shinyapps.io/" style="color:var(--teal-dk);display:block;" target="_blank">shinyapps.io</a>
+      <a href="https://chart-studio.plotly.com/" style="color:var(--teal-dk);display:block;" target="_blank">Plotly Chart Studio</a>
+      <a href="https://streamlit.io/cloud" style="color:var(--teal-dk);display:block;" target="_blank">Streamlit Community Cloud</a>
+      <a href="https://huggingface.co/spaces" style="color:var(--teal-dk);display:block;" target="_blank">Hugging Face Spaces</a>
+      <a href="https://pages.github.com/" style="color:var(--teal-dk);display:block;" target="_blank">GitHub Pages</a>
+      <a href="https://ngrok.com/" style="color:var(--teal-dk);display:block;" target="_blank">ngrok</a>
+      <a href="https://posit.co/products/enterprise/connect/" style="color:var(--teal-dk);display:block;" target="_blank">Posit Connect</a>
+      <a href="https://shiny.posit.co/r/articles/share/shiny-server/" style="color:var(--teal-dk);display:block;" target="_blank">Shiny Server (open source)</a>
+      <a href="https://www.docker.com/" style="color:var(--teal-dk);display:block;" target="_blank">Docker</a>
+      <a href="https://aws.amazon.com/" style="color:var(--teal-dk);display:block;" target="_blank">AWS</a>
+      <a href="https://cloud.google.com/" style="color:var(--teal-dk);display:block;" target="_blank">Google Cloud</a>
+      <a href="https://www.digitalocean.com/" style="color:var(--teal-dk);display:block;" target="_blank">DigitalOcean</a>
+    </div>
+
+  </div>
+
+  <aside class="notes">These links are all clickable in the browser — they open in a new tab. The file is in the workshop repo so participants can access it after the session. Worth pointing out Mastering Shiny specifically — it is a free online book by Hadley Wickham and is the best resource for going deeper on Shiny after today.</aside>
+</section>
+
+<section>
+  <h2>What&rsquo;s next</h2>
+  <div class="grid3">
+    <div class="card-plain"><div class="card-head">Part 2 &mdash; Code walkthrough</div>Start with <code>mini_app.R</code> &mdash; 6 steps introducing inputs, events, and reactive outputs.<br><br>Then <code>app.R</code> &mdash; 17 annotated steps, full reactive linkages, live demo.</div>
+    <div class="card-plain"><div class="card-head">Part 3 &mdash; LLM coding session</div>Extend <code>mini_app.R</code>, bring your own data, or port a feature from <code>app.R</code>.<br><br>Use the suggested prompts in the README as a starting point.</div>
+    <div class="card"><div class="card-head" style="font-style:normal;">Before you open RStudio</div>Working directory set to the workshop folder?<br><br>All packages installed?<br><br>Data files in the <code>data/</code> subfolder?</div>
+  </div>
+
+  <aside class="notes">Part 2 starts with mini_app.R — it has just one dropdown, one map click event, and one time series plot. We will run it, interact with it, and trace every arrow in the reactive diagram. Then we move to app.R which layers on top of those same concepts. In Part 3 you will have an LLM assistant — Claude, Gemini, or ChatGPT — and the goal is to extend mini_app.R or bring your own data. Do not worry about having a perfect dataset — you can ask the LLM to generate simulated data and build the app around it first.</aside>
+</section>
+
+</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/dist/reveal.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/reveal.js@5.1.0/plugin/notes/notes.js"></script>
+<script>
+Reveal.initialize({
+  hash:true,slideNumber:true,progress:true,
+  transition:'fade',transitionSpeed:'slow',
+  controls:true,center:false,margin:0.05,
+  plugins: [ RevealNotes ]
+});
+</script>
+</body>
+</html>
