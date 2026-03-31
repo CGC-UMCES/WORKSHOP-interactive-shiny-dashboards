@@ -91,7 +91,7 @@ library(terra)
 cat("All packages loaded successfully!\n")
 ```
 
-**Note on leaflet.extras:** This package is not currently available on CRAN for R 4.x and has been removed from the demo app. See Step 1 of `app.R` for re-enable instructions if it becomes available.
+**Note on leaflet.extras:** This package has been removed from the demo app. It installs without issue but integrating it requires non-trivial code changes beyond a simple library call. See Step 1 of `app.R` for basic re-enable instructions if you wish to attempt it.
 
 ---
 
@@ -408,7 +408,7 @@ update.packages(ask = FALSE)
 install.packages("package_name")
 ```
 
-**`leaflet.extras` is now available on CRAN for R 4.x. Removed from the demo app but could be incorporated with some effort now in `app.R`.
+**`leaflet.extras` is now available on CRAN for R 4.x but has been removed from the demo app. Integrating it requires non-trivial code changes — see Step 1 of `app.R` for guidance if you wish to attempt it.
 
 **Special characters show as ? in RStudio viewer:** Font rendering issue in the viewer pane only. Click **Open in Browser** — the browser renders everything correctly and gives more screen space.
 
